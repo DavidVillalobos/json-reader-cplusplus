@@ -1,0 +1,7 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>290</x><y>230</y><w>100</w><h>50</h></coordinates><panel_attributes>/Property/
+--
+name : string</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>170</x><y>340</y><w>140</w><h>50</h></coordinates><panel_attributes>Simple
+--
+value : T</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>380</x><y>340</y><w>370</w><h>50</h></coordinates><panel_attributes>Composite
+--
+properties : Dictionary&lt;name : string, property : Property&gt;</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>230</x><y>270</y><w>130</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>110;10;110;40;10;40;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>330</x><y>300</y><w>160</w><h>60</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;140;10;140;40</additional_attributes></element></diagram>
