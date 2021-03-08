@@ -1,3 +1,5 @@
+# Simple makefile's project
+
 OBJS = main.o Composite.o
 SOURCE = main.cpp Composite.cpp
 HEADER = Property.h Simple.h Composite.h

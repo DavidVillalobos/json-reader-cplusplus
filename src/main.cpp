@@ -1,3 +1,10 @@
+/*
+    File: main.cpp
+    Author: David Villalobos
+    Date: 2021-08-03
+    Description: Main's project
+*/
+
 #include<iostream>
 using namespace std;
 

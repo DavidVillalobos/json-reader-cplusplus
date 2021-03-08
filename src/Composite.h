@@ -1,5 +1,5 @@
 /*
-    File: Json.h
+    File: Composite.h
     Author: David Villalobos
     Date: 2021-08-03
     Description: Declaration of class Composite
