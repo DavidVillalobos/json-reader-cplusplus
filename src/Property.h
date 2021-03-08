@@ -14,11 +14,11 @@ using std::string;
 
 class Property{
     protected:
-        string name;   
-        string type;
+        string name, type;
     public:
         Property(string name, string type = ""){
             this->name = name; 
+            this->type = type;
         }
         string getName(){
             return name;

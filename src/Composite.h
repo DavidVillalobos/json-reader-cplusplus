@@ -10,15 +10,15 @@
 #define COMPOSITE_H
 
 // Includes
-#include <unordered_map>
-using std::unordered_map;
+#include <map>
+using std::map;
 
 #include"Property.h"
 
 class Composite : public Property{
     public:
-        unordered_map<string, Property*> properties;
-        Composite(string name, string type);
+        map<string, Property*> prop;
+        Composite(string type, string name = "");
         Property* indexAt(int position);
         virtual ~Composite();
 };

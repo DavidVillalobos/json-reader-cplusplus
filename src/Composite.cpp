@@ -7,16 +7,14 @@
 */
 #include"Composite.h"
 
-Composite::Composite(string name, string type) : Property(name, type){
+Composite::Composite(string type, string name) : Property(name, type){
 
 }
-#include<iostream>
-using namespace std;
 
 Property* Composite::indexAt(int position){
-    if(0 <= position && properties.size() < (unsigned int) position) {
+	if(0 <= position && (unsigned int) position < prop.size()) {
         int pos = 0;
-        for (auto x : properties){
+        for (auto x : prop){
             if(pos == position){
                 return x.second;
             }
@@ -28,7 +26,7 @@ Property* Composite::indexAt(int position){
 }
 
 Composite::~Composite(){
-    for (auto x : properties){
+    for (auto x : prop){
         delete x.second; // free memory
     }
 }
