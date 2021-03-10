@@ -1,7 +1,7 @@
 /*
     File: Composite.h
     Author: David Villalobos
-    Date: 2021-08-03
+    Date: 2021-09-03
     Description: Declaration of class Composite
     to represent a object or an array.
 */
@@ -13,14 +13,14 @@
 #include <map>
 using std::map;
 
-#include"Property.h"
+#include"Element.h"
 
-class Composite : public Property{
+class Composite : public Element{
     public:
-        map<string, Property*> prop;
-        Composite(string type, string name = "");
-        Property* indexAt(int position);
+        map<string, Element*> prop;
+        Composite(string name);
         virtual ~Composite();
+        Element* operator [](int position);
 };
 
 #endif // !COMPOSITE_H

@@ -1,32 +1,27 @@
 /*
     File: Property.h
     Author: David Villalobos
-    Date: 2021-08-03
-    Description: Base class to represent a property of a json
+    Date: 2021-09-03
+    Description: Declaration of class Property
+    to represent a simple value of a json, as
+    int, float, bool or string.
 */
 
 #ifndef PROPERTY_H
 #define PROPERTY_H
-
 // Includes
-#include<string>
-using std::string;
+#include<ostream>
+using std::ostream;
+#include"Element.h"
 
-class Property{
+class Property : public Element{
     protected:
-        string name, type;
+        string value;
     public:
-        Property(string name, string type = ""){
-            this->name = name; 
-            this->type = type;
-        }
-        string getName(){
-            return name;
-        }
-        string getType(){
-            return type;
-        }
-        virtual ~Property(){ }
+        Property(string name, string value);
+        string getValue();
+        friend ostream& operator <<(ostream &o, const Property &p);
+        virtual ~Property();
 };
 
 #endif // !PROPERTY_H
