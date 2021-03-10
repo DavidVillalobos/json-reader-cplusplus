@@ -1,0 +1,16 @@
+{
+	"name":"David",
+	"age":21,
+	"height":1.64,
+	"weight":89,
+	"notes":[
+		{
+			"name":"spanish",
+			"grade":65.6
+		},
+		{	
+			"name":"math",
+			"grade":89.5
+		}
+	]
+}
