@@ -1,13 +1,13 @@
 /*
     File: Composite.cpp
     Author: David Villalobos
-    Date: 2021-09-03
+    Date: 2021-11-03
     Description: Implementation of class Composite
     to represent a object or an array.
 */
 #include"Composite.h"
 
-Composite::Composite(string name) : Element(name){
+Composite::Composite(string name, string value) : Element(name, value){
 
 }
 
@@ -23,6 +23,12 @@ Element* Composite::operator[](int position){
     }
     // Index out of bounds
     return nullptr;
+}
+
+ostream& operator << (ostream &o,const Composite &c)
+{
+    o << c.value;
+    return o;
 }
 
 Composite::~Composite(){
