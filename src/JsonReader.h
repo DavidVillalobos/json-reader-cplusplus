@@ -1,7 +1,7 @@
 /*
     File: JsonReader.h
     Author: David Villalobos
-    Date: 2021-08-03
+    Date: 2021-11-03
     Description: Declaration of class JsonReader
     to reader a file json and create a structure.
 */
@@ -16,15 +16,21 @@ using namespace std;
 #include"Composite.h"
 #include"Property.h"
 
+#include<iostream>
+
 class JsonReader{
     private:
         string path;
         string file;
         Composite* object;
+        regex regex_properties_in_obj; 
+        regex regex_objects_in_array;
+        Composite* loadObjectsFromArray(string arrName, string arrBody);
+        Composite* loadPropertiesFromObject(string objName, string objBody);
     public:
         JsonReader(string path);
-        void loadObject();
         string getFile();
-        Element* operator [](string prop);
+        string operator [](string prop);
+        Element* operator ()(string prop);
 };
 #endif // !JSONREADER_H
