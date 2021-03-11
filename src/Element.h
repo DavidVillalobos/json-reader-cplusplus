@@ -1,7 +1,7 @@
 /*
     File: Element.h
     Author: David Villalobos
-    Date: 2021-09-03
+    Date: 2021-11-03
     Description: Declaration of Base class to represent a property of a json
 */
 
@@ -9,16 +9,22 @@
 #define ELEMENT_H
 
 // Includes
+#include<ostream>
+using std::ostream;
+
 #include<string>
 using std::string;
 
 class Element{
-    private:
-        string name;
+    protected:
+        string name, value;
     public:
-        Element(string name);
+        Element(string name, string value);
         virtual ~Element();
+        friend ostream& operator <<(ostream &o, const Element &e);
+        //operator string() const { return value; }
         string getName();
+        string getValue();
 };
 
 #endif // !ELEMENT_H
