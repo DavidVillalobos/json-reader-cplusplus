@@ -1,7 +1,7 @@
 /*
     File: Composite.h
     Author: David Villalobos
-    Date: 2021-11-03
+    Date: 2021-12-03
     Description: Declaration of class Composite
     to represent a object or an array.
 */
@@ -10,21 +10,18 @@
 #define COMPOSITE_H
 
 // Includes
-#include<ostream>
-using std::ostream;
-
 #include <map>
-using std::map;
 
 #include"Element.h"
 
 class Composite : public Element{
     public:
-        map<string, Element*> prop;
-        Composite(string name, string value);
-        friend ostream& operator <<(ostream &o, const Composite &c);
+        std::map<std::string, Element*> properties;
+        Composite(std::string name, std::string value);
+        friend std::ostream& operator <<(std::ostream &o, const Composite &c);
+        Element* getProperty(std::string prop);
+        Element* getObject(int index);
         virtual ~Composite();
-        Element* operator [](int position);
 };
 
 #endif // !COMPOSITE_H

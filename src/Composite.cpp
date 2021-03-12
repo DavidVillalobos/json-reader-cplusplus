@@ -1,38 +1,40 @@
 /*
     File: Composite.cpp
     Author: David Villalobos
-    Date: 2021-11-03
+    Date: 2021-12-03
     Description: Implementation of class Composite
     to represent a object or an array.
 */
 #include"Composite.h"
 
-Composite::Composite(string name, string value) : Element(name, value){
+Composite::Composite(std::string name, std::string value) : Element(name, value){
 
 }
 
-Element* Composite::operator[](int position){
-	if(0 <= position && (unsigned int) position < prop.size()) {
-        int pos = 0;
-        for (auto x : prop){
-            if(pos == position){
+Element* Composite::getObject(int index){
+	if(0 <= index && (unsigned int) index < properties.size()) {
+        for (auto x : properties){
+            if(x.first == std::to_string(index)){
                 return x.second;
             }
-            pos++;
         }
     }
-    // Index out of bounds
+    // Index out of boundsx
     return nullptr;
 }
 
-ostream& operator << (ostream &o,const Composite &c)
+Element* Composite::getProperty(std::string prop){
+    return properties[prop];
+}
+
+std::ostream& operator << (std::ostream &o,const Composite &c)
 {
     o << c.value;
     return o;
 }
 
 Composite::~Composite(){
-    for (auto x : prop){
+    for (auto x : properties){
         delete x.second; // free memory
     }
 }
