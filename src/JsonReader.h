@@ -1,36 +1,36 @@
 /*
     File: JsonReader.h
     Author: David Villalobos
-    Date: 2021-11-03
+    Date: 2021-12-03
     Description: Declaration of class JsonReader
     to reader a file json and create a structure.
 */
 #ifndef JSONREADER_H
 #define JSONREADER_H
+
 //Includes
-#include <iostream> 
 #include <regex> 
 #include<fstream>
-using namespace std; 
 
 #include"Composite.h"
 #include"Property.h"
 
-#include<iostream>
 
 class JsonReader{
     private:
-        string path;
-        string file;
+        std::string path;
+        std::string file;
         Composite* object;
-        regex regex_properties_in_obj; 
-        regex regex_objects_in_array;
-        Composite* loadObjectsFromArray(string arrName, string arrBody);
-        Composite* loadPropertiesFromObject(string objName, string objBody);
+        std::regex regex_properties_in_obj; 
+        std::regex regex_objects_in_array;
+        std::regex regex_load_path_prop;
+        Composite* loadObjectsFromArray(std::string arrName, std::string arrBody);
+        Composite* loadPropertiesFromObject(std::string objName, std::string objBody);
     public:
-        JsonReader(string path);
-        string getFile();
-        string operator [](string prop);
-        Element* operator ()(string prop);
+        JsonReader(std::string path);
+        ~JsonReader();
+        std::string getFile();
+        std::string getPath();
+        std::string operator [](std::string path_prop);
 };
 #endif // !JSONREADER_H
