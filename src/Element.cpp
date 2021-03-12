@@ -1,13 +1,13 @@
 /*
     File: Element.cpp
     Author: David Villalobos
-    Date: 2021-11-03
+    Date: 2021-12-03
     Description: Implementation of base class to represent a property of a json
 */
 
 #include"Element.h"
 
-Element::Element(string name, string value){
+Element::Element(std::string name, std::string value){
     this->name = name; 
     this->value = value; 
 }
@@ -16,16 +16,15 @@ Element::~Element(){
 
 }
 
-string Element::getName(){
+std::string Element::getName(){
     return name;
 }
 
-string Element::getValue(){
+std::string Element::getValue(){
     return value;
 }
 
-ostream& operator << (ostream &o,const Element &e){
+std::ostream& operator << (std::ostream &o,const Element &e){
     o << e.value;
     return o;
 }
-
