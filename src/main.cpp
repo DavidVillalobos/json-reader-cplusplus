@@ -1,8 +1,8 @@
 /*
     File: main.cpp
     Author: David Villalobos
-    Date: 2021-12-03
-    Description: Main's project
+    Date: 2021-13-03
+    Description: Main's project with test cases
 */
 // Includes
 #include<iostream>
@@ -36,8 +36,7 @@ int main(int argc, char** argv){
 	execute_test(file_2, 4, "phoneNumbers/1/number", "8462945527");
 }
 
-void execute_test(JsonReader& file, int number, std::string path, std::string val_expected){
-	std::string result = file[path]; 
-	std::cout << "Test #" << number << ((result == val_expected)? " Pass :D" : " Fail :c") << std::endl;
+void execute_test(JsonReader& file, int number, std::string path, std::string val_expected){ 
+	std::cout << "Test #" << number << " -> " << ((file[path] == val_expected)? " Pass :D" : " Fail :c") << '\n';
 }
 
