@@ -1,9 +1,9 @@
 #	File: SIMPLE_MAKEFILE
 #	Author: David Villalobos
-#	Date: 2021-12-03
+#	Date: 2021-14-03
 
-OBJS = main.o Element.o Composite.o Property.o JsonReader.o
-SOURCE = main.cpp Element.cpp Composite.cpp Property.cpp JsonReader.cpp
+OBJS = main.o Element.o Composite.o Property.o Json.o
+SOURCE = main.cpp Element.cpp Composite.cpp Property.cpp Json.cpp
 OUT = main.exe
 CC = g++
 FLAGS = -c -g -Wall
@@ -18,8 +18,8 @@ Composite.o: Composite.cpp
 Element.o: Element.cpp
 	$(CC) $(FLAGS) Element.cpp
 
-JsonReader.o: JsonReader.cpp
-	$(CC) $(FLAGS) JsonReader.cpp
+Json.o: Json.cpp
+	$(CC) $(FLAGS) Json.cpp
 
 Property.o: Property.cpp
 	$(CC) $(FLAGS) Property.cpp
