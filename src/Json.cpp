@@ -1,13 +1,13 @@
 /*
-    File: JsonReader.cpp
+    File: Json.cpp
     Author: David Villalobos
-    Date: 2021-13-03
-    Description: Implementation of class JsonReader
+    Date: 2021-14-03
+    Description: Implementation of class Json
     to reader a file json and create a structure.
 */
-#include"JsonReader.h"
-#include<iostream>
-JsonReader::JsonReader(std::string path){
+#include"Json.h"
+
+Json::Json(std::string path){
     this->path = path;
     this->regex_objects_in_array = std::regex("\\{[\\w:\".,]+,?\\}");
     this->regex_properties_in_obj = std::regex("\"([\\w0-9.]+)\":\"?([\\w0-9.]+|\\[[\\w0-9.\"{}:,]+\\]|\\{[\\w0-9.\"{}:,]+\\})\"?");
@@ -31,11 +31,11 @@ JsonReader::JsonReader(std::string path){
     this->object = loadPropertiesFromObject("root", file);
 }
 
-JsonReader::~JsonReader(){
+Json::~Json(){
     delete object;
 }
 
-Composite* JsonReader::loadObjectsFromArray(std::string arrName, std::string arrBody){
+Composite* Json::loadObjectsFromArray(std::string arrName, std::string arrBody){
     Composite* obj = new Composite(arrName, arrBody);
     std::smatch match;
     int pos = 0;
@@ -49,7 +49,7 @@ Composite* JsonReader::loadObjectsFromArray(std::string arrName, std::string arr
     return obj;
 }
 
-Composite* JsonReader::loadPropertiesFromObject(std::string objName, std::string objBody){
+Composite* Json::loadPropertiesFromObject(std::string objName, std::string objBody){
     Composite* obj = new Composite(objName, objBody);
     std::string name, value;
     std::smatch match;
@@ -71,15 +71,15 @@ Composite* JsonReader::loadPropertiesFromObject(std::string objName, std::string
     return obj; 
 }
 
-std::string JsonReader::getFile(){
+std::string Json::getFile(){
     return file;
 }
 
-std::string JsonReader::getPath(){
+std::string Json::getPath(){
     return path;
 }
 
-std::string JsonReader::operator[](std::string path_prop){
+std::string Json::operator[](std::string path_prop){
     std::smatch match;
     Element* e = object; 
     std::string res = "";
