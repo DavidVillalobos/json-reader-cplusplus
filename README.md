@@ -1,4 +1,4 @@
-<img src="res/Title.png" width="550">   
+<img src="res/MainTitle.png" width="550">   
 
 Json reader for c++, allows to generate a structure "Json" in c++ from a simple json file.  
 build with c++ only, using the fstream and regex libraries.
@@ -43,4 +43,4 @@ int main(int argc, char** argv){
 }
 ```
 The result per console is as follows:  
-<img src="res/ResultTest.png" width="550">   
+<img src="res/ResultTest.png" width="450">   
