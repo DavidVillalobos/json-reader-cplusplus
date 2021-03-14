@@ -1,4 +1,4 @@
-# Json cplusplus
+# Json Reader Cplusplus
 
 Json reader for c++, allows to generate a structure JSON in c++ from a json file.
 
