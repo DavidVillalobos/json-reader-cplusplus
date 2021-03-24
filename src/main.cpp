@@ -1,7 +1,7 @@
 /*
     File: main.cpp
     Author: David Villalobos
-    Date: 2021-14-03
+    Date: 2021-24-03
     Description: Main's project with test cases
 */
 // Includes
@@ -16,24 +16,24 @@ int main(int argc, char** argv){
 	Json file_1("example.json");
 	// READFILE example2.json
 	Json file_2("example2.json");
-
+	int number_test = 1;
 	// Test example.json
 	std::cout << "Test for " << file_1.getPath() << std::endl;
 	// TEST #1
-	execute_test(file_1, 1, "Name", "Denu");
+	execute_test(file_1, number_test++, "Name", "Denu");
 	// TEST #2
-	execute_test(file_1, 2, "Contact", "12345678");
-
+	execute_test(file_1, number_test++, "Contact", "12345678");
+	number_test = 1;
 	// Test example2.json
 	std::cout << "Test for " << file_2.getPath() << std::endl;
 	// TEST #1
-	execute_test(file_2, 1, "firstName", "Rack");
+	execute_test(file_2, number_test++, "firstName", "Rack");
 	// TEST #2
-	execute_test(file_2, 2, "address/postalCode", "394221");
+	execute_test(file_2, number_test++, "address/postalCode", "394221");
 	// TEST #3
-	execute_test(file_2, 3, "address/streetAddress", "126");
+	execute_test(file_2, number_test++, "address/streetAddress", "126");
 	// TEST #4
-	execute_test(file_2, 4, "phoneNumbers/1/number", "8462945527");
+	execute_test(file_2, number_test++, "phoneNumbers/1/number", "8462945527");
 }
 
 void execute_test(Json& file, int number, std::string path, std::string val_expected){ 
