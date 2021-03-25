@@ -1,7 +1,7 @@
 /*
     File: Json.cpp
     Author: David Villalobos
-    Date: 2021-24-03
+    Date: 2021-25-03
     Description: Implementation of class Json
     to reader a file json and create a structure.
 */
@@ -9,7 +9,7 @@
 
 Json::Json(std::string path){
     this->path = path;
-    this->regex_properties_in_obj = std::regex("\"([\\w0-9.]+)\":\"?([\\w0-9.]+|\\[[\\w0-9.\"{}:,]+\\]|\\{[\\w0-9.\"{}:,]+\\})\"?");
+    this->regex_properties_in_obj = std::regex("\"([\\w0-9. ]+)\":\"?([\\w0-9. ]+|\\[[\\w0-9. \"{}:,]+\\]|\\{[\\w0-9 .\"{}:,]+\\})\"?");
     this->regex_load_path_prop = std::regex("([\\w.'_-]+)/?");
     // Bugs when debbuger (gdb) maybe not locate a file :0
     // Read a json file  /*
@@ -25,8 +25,8 @@ Json::Json(std::string path){
     }
     // */
     //file = "{\"firstName\":\"Rack\",\"lastName\":\"Jackon\",\"gender\":\"man\",\"age\":24,\"address\":{\"streetAddress\":\"126\",\"city\":\"SanJone\",\"state\":\"CA\",\"postalCode\":\"394221\"},\"phoneNumbers\":[{\"type\":\"home\",\"number\":\"7383627627\",\"example\":{\"object\":\"name\",\"value\":false}},{\"type\":\"office\",\"number\":\"8462945527\"}]}";
-    // Remove spaces tabs and endlines
-    std::regex r("\n|\t| "); 
+    // Remove endlines, tabs and black spaces (not in string)
+    std::regex r("\n|\t| (?=([^\"]*\"[^\"]*\")*[^\"]*$)"); 
     file = std::regex_replace(file, r, "");
     this->object = loadPropertiesFromObject("root", file);
 }
