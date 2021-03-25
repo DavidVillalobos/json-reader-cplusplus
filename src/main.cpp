@@ -1,7 +1,7 @@
 /*
     File: main.cpp
     Author: David Villalobos
-    Date: 2021-24-03
+    Date: 2021-25-03
     Description: Main's project with test cases
 */
 // Includes
@@ -29,10 +29,12 @@ int main(int argc, char** argv){
 	// TEST #1
 	execute_test(file_2, number_test++, "firstName", "Rack");
 	// TEST #2
-	execute_test(file_2, number_test++, "address/postalCode", "394221");
+	execute_test(file_2, number_test++, "address/city", "San Jone");
 	// TEST #3
-	execute_test(file_2, number_test++, "address/streetAddress", "126");
+	execute_test(file_2, number_test++, "address/postalCode", "394221");
 	// TEST #4
+	execute_test(file_2, number_test++, "address/streetAddress", "126");
+	// TEST #5
 	execute_test(file_2, number_test++, "phoneNumbers/1/number", "8462945527");
 }
 
