@@ -1,2 +1,4 @@
 .vscode
 admin
+*.o
+*.exe
