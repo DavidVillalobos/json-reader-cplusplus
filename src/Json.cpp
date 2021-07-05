@@ -12,7 +12,8 @@ Json::Json(std::string path){
     this->regex_properties_in_obj = std::regex("\"([\\w0-9. ]+)\":\"?([\\w0-9. ]+|\\[[\\w0-9. \"{}:,]+\\]|\\{[\\w0-9 .\"{}:,]+\\})\"?");
     this->regex_load_path_prop = std::regex("([\\w.'_-]+)/?");
     // Bugs when debbuger (gdb) maybe not locate a file :0
-    // Read a json file  /*
+    // Read a json file  
+    /*
     std::ifstream f(path);
     if(f.good()){
         std::string aux;
@@ -23,8 +24,10 @@ Json::Json(std::string path){
     }else{
         throw "FAIL: File not found or not load in path" + path;
     }
-    // */
+    // 
+    */
     //file = "{\"firstName\":\"Rack\",\"lastName\":\"Jackon\",\"gender\":\"man\",\"age\":24,\"address\":{\"streetAddress\":\"126\",\"city\":\"SanJone\",\"state\":\"CA\",\"postalCode\":\"394221\"},\"phoneNumbers\":[{\"type\":\"home\",\"number\":\"7383627627\",\"example\":{\"object\":\"name\",\"value\":false}},{\"type\":\"office\",\"number\":\"8462945527\"}]}";
+    file = "{\"products\":[{\"id\":\"0001\",\"type\":\"donut\",\"name\":\"Cake\",\"price\":4.55,\"discount\":true,\"stock\":30,\"batters\":{\"batter\":[{\"id\":\"1001\",\"type\":\"Regular\"},{\"id\":\"1002\",\"type\":\"Chocolate\"},{\"id\":\"1003\",\"type\":\"Blueberry\"},{\"id\":\"1004\",\"type\":\"Devil'sFood\"}]},\"topping\":[{\"id\":\"5001\",\"type\":\"None\"},{\"id\":\"5002\",\"type\":\"Glazed\"},{\"id\":\"5005\",\"type\":\"Sugar\"},{\"id\":\"5007\",\"type\":\"PowderedSugar\"},{\"id\":\"5006\",\"type\":\"ChocolatewithSprinkles\"},{\"id\":\"5003\",\"type\":\"Chocolate\"},{\"id\":\"5004\",\"type\":\"Maple\"}]},{\"id\":\"0002\",\"type\":\"donut\",\"name\":\"Raised\",\"price\":3.55,\"discount\":false,\"stock\":15,\"batters\":{\"batter\":[{\"id\":\"1001\",\"type\":\"Regular\"}]},\"topping\":[{\"id\":\"5001\",\"type\":\"None\"},{\"id\":\"5002\",\"type\":\"Glazed\"},{\"id\":\"5005\",\"type\":\"Sugar\"},{\"id\":\"5003\",\"type\":\"Chocolate\"},{\"id\":\"5004\",\"type\":\"Maple\"}]},{\"id\":\"0003\",\"type\":\"donut\",\"name\":\"OldFashioned\",\"price\":3.55,\"discount\":true,\"stock\":20,\"batters\":{\"batter\":[{\"id\":\"1001\",\"type\":\"Regular\"},{\"id\":\"1002\",\"type\":\"Chocolate\"}]},\"topping\":[{\"id\":\"5001\",\"type\":\"None\"},{\"id\":\"5002\",\"type\":\"Glazed\"},{\"id\":\"5003\",\"type\":\"Chocolate\"},{\"id\":\"5004\",\"type\":\"Maple\"}]}]}";
     // Remove endlines, tabs and black spaces (not in string)
     std::regex r("\n|\t| (?=([^\"]*\"[^\"]*\")*[^\"]*$)"); 
     file = std::regex_replace(file, r, "");
@@ -117,3 +120,37 @@ std::string Json::operator[](std::string path_prop){
     } 
     return res;
 }
+
+std::string Json::get(std::string path_prop, int &prop){
+    std::string prop_string = operator[](path_prop);
+    try{
+        prop = stoi(prop_string);
+    }catch(...){
+        prop = 0;
+    }
+    return prop_string;
+}
+
+std::string Json::get(std::string path_prop, float &prop){
+    std::string prop_string = operator[](path_prop);
+    try{
+        prop = stof(prop_string);
+    }catch(...){
+        prop = 0;
+    }
+    return prop_string;
+}
+
+std::string Json::get(std::string path_prop, bool &prop){
+    std::string prop_string = operator[](path_prop);
+    try{
+        prop = prop_string == "true";
+    }catch(...){
+        prop = false;
+    }
+    return prop_string;
+}
+
+std::string Json::get(std::string path_prop, std::string &prop){
+    return operator[](path_prop);
+};
