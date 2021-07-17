@@ -10,7 +10,7 @@
 Json::Json(std::string path) : Element("") {
     this->path = path;
     if (path != "") {
-        std::ifstream f("aja.json");
+        std::ifstream f(path);
         std::string file;
         if (f.good()) {
             std::string aux;
@@ -18,72 +18,102 @@ Json::Json(std::string path) : Element("") {
                 std::getline(f, aux);
                 file += aux;
             }
+            Json* temp = ObjectFromString(file);
+            this->value = temp->value;
         }
         else {
-            throw "FAIL: File not found in path " + path;
+            throw std::runtime_error("Could not open file " + path);
         }
     }
 }
 
-#include<iostream>
+Json& Json::operator=(const Json& other)
+{
+    this->path = other.path;
+    this->value = other.value;
+    return *this;
+}
 
-Json Json::ObjectFromString(std::string object) {
-    Json temp;
-    
-    std::smatch match;
-    std::regex prop("\"([\\w0-9. ]+)\"[ ]*:[ ]*\"?([\\w0-9. ]+)\"?");
-    std::regex obj("\"[\\w0-9]+\"[ \n\t]*:[ \\n\\t]*(\\{[\\w:, {}\\n\\t\"]*})");
-    std::regex arr("\"[\\w0-9]+\"[ \n\t]*:[ \\n\\t]*(\\[[\\w:, {}\\n\\t\"]*])");
-    std::smatch::iterator i;
-    while (regex_search(object, match, prop)) {
-        i = match.begin();
-        i++;
-        std::cout << "Group #1 Name: " << i->str() << std::endl;
-        i++;
-        if (i->str() == " ") {
-            std::cout << "Group #2 Prop: " << i->str() << std::endl;
+Json::Json(const Json& other) : Element("") {
+    this->path = other.path;
+    for (auto x : other.value) {
+        Property* p = dynamic_cast<Property*>(x.second);
+        if (p) {
+            this->value[x.first] = new Property(x.first, p->getValue()); 
         }
         else {
-            if (object.find("{") < object.find("[")) { 
-                if (regex_search(object, match, obj)) {
-                    i = match.begin();
-                    i++;
-                    std::cout << "Group #2 Obj: " << i->str() << std::endl;
-                }
-            }
-            else { 
-                if (regex_search(object, match, arr)) {
-                    std::smatch::iterator j = match.begin();
-                    i++;
-                    std::cout << "Group #2 Arr: " << i->str() << std::endl;
-                }
-            }
+            Json* temp1 = dynamic_cast<Json*>(x.second);
+            Json* temp2 = new Json(*temp1);
+            this->value[x.first] = temp2;
         }
-        object = match.suffix().str();
     }
+   
+}
+
+std::string Json::sliceText(std::string& text, char begin, char end) {
+    text.erase(0, text.find(begin) + 1);
+    int cant = 1; 
+    size_t i = 0;
+    for (; i < text.length(); i++) {
+        if (text[i] == begin) { cant++; }
+        else if (text[i] == end) { cant--; }
+        if (cant == 0) { break; }
+    }
+    std::string obj = text.substr(0, i);
+    text.erase(0, i);
+    return obj;
+}
+
+Json* Json::ObjectFromString(std::string object) {
+    Json* temp = new Json();
+    
+    std::smatch match;
+    std::regex r("\"([\\w0-9. ]+)\"[ ]*:[ ]*\"?([\\w0-9. ]+)\"?");
+    std::smatch::iterator i;
+    std::string name;
+    while (regex_search(object, match, r)) {
+        i = match.begin();
+        i++;
+        //std::cout << "Group #1 Name: " << i->str() << std::endl;
+        name = i->str();
+        i++;
+        if (i->str() != " ") {
+            temp->value[name] = new Property(name, i->str());
+            //std::cout << "Group #2 Prop: " << i->str() << std::endl;
+            object = match.suffix().str();
+        }
+        else {
+            if (object.find("{") < object.find("[")) { // is object
+                Json* aux = ObjectFromString(sliceText(object, '{', '}'));
+                temp->value[name] = aux;
+                //std::cout << "Obj: " << sliceText(object, '{', '}') << std::endl;
+            }
+            //else { // is array
+                //std::cout << "Arr: " << sliceText(object, '[', ']') << std::endl;
+            //}
+        }
+    }
+
     return temp;
 }
 
-Json Json::ArrayFromString(std::string array){
-    Json temp;
+Json* Json::ArrayFromString(std::string array){
+    Json* temp = new Json();
     // build object json from array
     return temp;
 }
 
 std::ostream& operator << (std::ostream &o,const Json &c)
 {
-    o << "{ ";
-    for (auto tuple : c.value) {
-        o << tuple.second << ", ";
-    }
-    o << "}";
+    Property* prop = dynamic_cast<Property*>(c.value.begin()->second);
+    o << prop->getValue();
     return o;
 }
 
 Json::~Json(){
-    for (auto x : value){
+    /*for (auto x : value) {
         delete x.second; // free memory
-    }
+    }*/
 }
 
 std::string Json::getPath() {
@@ -94,28 +124,29 @@ Json::operator std::string() {
     return "GET STRING PROPERTY";
 }
 
-Json& Json::operator[](const char* prop) {
-    return *getProperty(std::string(prop));
+Json Json::operator[](const char* prop) {
+    return getProperty(std::string(prop));
 }
 
-Json& Json::operator[](std::string prop) {
-    return *getProperty(prop);
+Json Json::operator[](std::string prop) {
+    return getProperty(prop);
 }
 
-Json& Json::operator[](int index)
+Json Json::operator[](int index)
 {
-    return *getProperty(std::to_string(index));
+    return getProperty(std::to_string(index));
 }
 
-Json* Json::getProperty(std::string prop) {
+Json Json::getProperty(std::string prop) {
     Element* e = value[prop];
     Property* p = dynamic_cast<Property*>(e);
-    Json* temp;
+    Json temp;
     if (p) {
-        temp = new Json();
-        temp->value[prop] = e;
+        temp.value[prop] = e;
     } else {
-        temp = dynamic_cast<Json*>(e);
+        Json* temp2 = dynamic_cast<Json*>(e);
+        temp.path = temp2->path;
+        temp.value = temp2->value;
     }
     return temp;
 }
