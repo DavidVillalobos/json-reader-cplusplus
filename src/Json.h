@@ -1,40 +1,39 @@
 /*
-    File: Json.h
+    File: Composite.h
     Author: David Villalobos
-    Date: 2021-24-03
-    Description: Declaration of class Json
-    to reader a file json and create a structure.
+    Date: 2021-07-17
+    Description: Declaration of class Composite
+    to represent a object or an array.
 */
-#ifndef JSON_H
-#define JSON_H
 
-//Includes
+#ifndef COMPOSITE_H
+#define COMPOSITE_H
+
+// Includes
+#include <map>
 #include <regex> 
 #include<fstream>
 
-#include"Composite.h"
 #include"Property.h"
 
-
-class Json{
+class Json : public Element{
     private:
+        std::map<std::string, Element*> value;
         std::string path;
-        std::string file;
-        std::regex regex_properties_in_obj; 
-        std::regex regex_load_path_prop;
-        Composite* loadObjectsFromArray(std::string arrName, std::string arrBody);
-        Composite* loadPropertiesFromObject(std::string objName, std::string objBody);
-        std::string getObjectFromArray(std::string &arr);
-        Composite* object;
+        Json* getProperty(std::string prop);
     public:
-        Json(std::string path);
+        Json(std::string path = "");
+        static Json ObjectFromString(std::string object);
+        static Json ArrayFromString(std::string array);
         ~Json();
-        std::string getFile();
+        
         std::string getPath();
-        std::string operator [](std::string path_prop);
-        std::string get(std::string path_prop, int &prop);
-        std::string get(std::string path_prop, float &prop);
-        std::string get(std::string path_prop, bool &prop);
-        std::string get(std::string path_prop, std::string &prop);
+
+        friend std::ostream& operator <<(std::ostream& o, const Json& c);
+        operator std::string();
+        Json& operator[](const char* prop);
+        Json& operator[](std::string prop);
+        Json& operator[](int index);
 };
-#endif // !JSON_H
+
+#endif // !COMPOSITE_H
