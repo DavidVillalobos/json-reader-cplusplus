@@ -14,18 +14,19 @@ void execute_test(Json& file, int number, std::string path, std::string val_expe
 int main(int argc, char** argv){
 	// READFILE example.json
 	Json file_1("example.json");
+	std::cout << file_1["LastName"];
 	// READFILE example2.json
-	Json file_2("example2.json");
-	int number_test = 1;
+	//Json file_2("example2.json");
+	//int number_test = 1;
 	// Test example.json
-	std::cout << "Test for " << file_1.getPath() << std::endl;
+	//std::cout << "Test for " << file_1.getPath() << std::endl;
 	// TEST #1
 	//execute_test(file_1, number_test++, "Name", "Denu");
 	// TEST #2
 	//execute_test(file_1, number_test++, "Contact", "12345678");
-	number_test = 1;
+	//number_test = 1;
 	// Test example2.json
-	std::cout << "Test for " << file_2.getPath() << std::endl;
+	//std::cout << "Test for " << file_2.getPath() << std::endl;
 	// TEST #1
 	//execute_test(file_2, number_test++, "firstName", "Rack");
 	// TEST #2
@@ -35,7 +36,7 @@ int main(int argc, char** argv){
 	// TEST #4
 	//execute_test(file_2, number_test++, "address/streetAddress", "126");
 	// TEST #5
-	execute_test(file_2, number_test++, "firstName", "8462945527");
+	//execute_test(file_2, number_test++, "firstName", "8462945527");
 	std::cin.get();
 }
 

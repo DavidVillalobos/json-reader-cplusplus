@@ -7,10 +7,11 @@
       <x>260</x>
       <y>290</y>
       <w>340</w>
-      <h>120</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>JSON
 --
+- path : string
 - value : Dictionary&lt;name : string, value : Element*&gt;
 --
 + operator: string
