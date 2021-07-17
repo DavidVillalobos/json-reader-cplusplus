@@ -1,48 +1,46 @@
 /*
     File: main.cpp
     Author: David Villalobos
-    Date: 2021-25-03
+    Date: 2021-07-17
     Description: Main's project with test cases
+
+
+    MIT License
+
+    Copyright (c) 2021 Luis David Villalobos González
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
 */
+
 // Includes
 #include<iostream>
-
 #include"Json.h"
 
-void execute_test(Json& file, int number, std::string path, std::string val_expected);
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 	// READFILE example.json
-	Json file_1("example.json");
-	std::cout << file_1["LastName"];
-	// READFILE example2.json
-	//Json file_2("example2.json");
-	//int number_test = 1;
-	// Test example.json
-	//std::cout << "Test for " << file_1.getPath() << std::endl;
-	// TEST #1
-	//execute_test(file_1, number_test++, "Name", "Denu");
-	// TEST #2
-	//execute_test(file_1, number_test++, "Contact", "12345678");
-	//number_test = 1;
-	// Test example2.json
-	//std::cout << "Test for " << file_2.getPath() << std::endl;
-	// TEST #1
-	//execute_test(file_2, number_test++, "firstName", "Rack");
-	// TEST #2
-	//execute_test(file_2, number_test++, "address/city", "San Jone");
-	// TEST #3
-	//execute_test(file_2, number_test++, "address/postalCode", "394221");
-	// TEST #4
-	//execute_test(file_2, number_test++, "address/streetAddress", "126");
-	// TEST #5
-	//execute_test(file_2, number_test++, "firstName", "8462945527");
-	std::cin.get();
+    try {
+        Json file_1("example.json");
+        Json subFile_1 = file_1["Name"];
+        std::cout << subFile_1;
+    } catch (std::exception& ex) {
+        std::cout << ex.what() << std::endl;
+    }
+    std::cin.get();
 }
-
-void execute_test(Json& file, int number, std::string path, std::string val_expected){
-	std::string result = file[path];
-	std::cout << "Test #" << number << " -> " << result << std::endl;
-	//std::cout << "Test #" << number << " -> " << ((result == val_expected)? " Pass :D" : " Fail :c") << '\n';
-}
-
