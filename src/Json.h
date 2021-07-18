@@ -37,6 +37,7 @@ class Json : public Element{
         operator int();
         operator float();
         operator bool();
+        operator double();
 
         Json operator[](const char* prop);
         Json operator[](std::string prop);
@@ -47,12 +48,14 @@ class Json : public Element{
         bool operator==(const int value);
         bool operator==(const float value);
         bool operator==(const bool value);
+        bool operator==(const double value);
         
         bool operator!=(const char* value);
         bool operator!=(const std::string value);
         bool operator!=(const int value);
         bool operator!=(const float value);
         bool operator!=(const bool value);
+        bool operator!=(const double value);
 
 };
 

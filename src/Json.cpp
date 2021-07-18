@@ -95,6 +95,7 @@ void Json::ObjectFromString(Json* temp, std::string object) {
         else {
             Json* aux = new Json();
             temp->value[name] = aux;
+            object = match.suffix().str();
             if (object.find("{") < object.find("[")) { // is object
                 ObjectFromString(aux, sliceText(object, '{', '}'));
                 //std::cout << "Obj: " << sliceText(object, '{', '}') << std::endl;
@@ -180,6 +181,23 @@ Json::operator float() {
     }
 }
 
+Json::operator double() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        try {
+            return stod(p->getValue());
+        }
+        catch (std::exception& err) {
+            return 0.0;
+        }
+    }
+    else {
+        return 0.0;
+    }
+}
+
 Json::operator bool() {
     Element* e = value.begin()->second;
     Property* p = dynamic_cast<Property*>(e);
@@ -207,18 +225,22 @@ Json Json::operator[](int index)
 
 Json Json::getProperty(std::string prop) {
     Element* e = value[prop];
-    Property* p = dynamic_cast<Property*>(e);
     Json temp;
+    if (!e) {
+        temp.value["error"] = new Property("error", "Property " + prop + " does not exist in the json");
+        return temp;
+    }
+    Property* p = dynamic_cast<Property*>(e);
     if (p) {
         temp.value[prop] = new Property(*p);
-    } else {
+    }
+    else {
         Json* temp2 = dynamic_cast<Json*>(e);
         if (temp2) {
-            temp.path = temp2->path;
-            temp.value = temp2->value;
+            return Json(*temp2);
         }
     }
-    return temp;
+    return temp;  
 }
 
 bool Json::operator==(const char* value) {
@@ -237,6 +259,9 @@ bool Json::operator==(const float value) {
 bool Json::operator==(const bool value) {
     return (bool)*this == value;
 }
+bool Json::operator==(const double value) {
+    return (double)*this == value;
+}
 
 bool Json::operator!=(const char* value) {
     std::string res = *this;
@@ -253,4 +278,7 @@ bool Json::operator!=(const float value) {
 }
 bool Json::operator!=(const bool value) {
     return (bool)*this != value;
+}
+bool Json::operator!=(const double value) {
+    return (double)*this != value;
 }
