@@ -30,7 +30,19 @@ Json::Json(std::string path) : Element("") {
 Json& Json::operator=(const Json& other)
 {
     this->path = other.path;
-    this->value = other.value;
+    for (auto x : other.value) {
+        Property* p = dynamic_cast<Property*>(x.second);
+        if (p) {
+            this->value[x.first] = new Property(x.first, p->getValue()); 
+        }
+        else {
+            Json* temp1 = dynamic_cast<Json*>(x.second);
+            if (temp1) {
+                Json* temp2 = new Json(*temp1);
+                this->value[x.first] = temp2;
+            }
+        }
+    }
     return *this;
 }
 
@@ -39,15 +51,16 @@ Json::Json(const Json& other) : Element("") {
     for (auto x : other.value) {
         Property* p = dynamic_cast<Property*>(x.second);
         if (p) {
-            this->value[x.first] = new Property(x.first, p->getValue()); 
+            this->value[x.first] = new Property(*p); 
         }
         else {
             Json* temp1 = dynamic_cast<Json*>(x.second);
-            Json* temp2 = new Json(*temp1);
-            this->value[x.first] = temp2;
+            if (temp1) {
+                Json* temp2 = new Json(*temp1);
+                this->value[x.first] = temp2;
+            }
         }
     }
-   
 }
 
 std::string Json::sliceText(std::string& text, char begin, char end) {
@@ -111,9 +124,9 @@ std::ostream& operator << (std::ostream &o,const Json &c)
 }
 
 Json::~Json(){
-    /*for (auto x : value) {
+    for (auto x : value) {
         delete x.second; // free memory
-    }*/
+    }
 }
 
 std::string Json::getPath() {
@@ -142,11 +155,13 @@ Json Json::getProperty(std::string prop) {
     Property* p = dynamic_cast<Property*>(e);
     Json temp;
     if (p) {
-        temp.value[prop] = e;
+        temp.value[prop] = new Property(*p);
     } else {
         Json* temp2 = dynamic_cast<Json*>(e);
-        temp.path = temp2->path;
-        temp.value = temp2->value;
+        if (temp2) {
+            temp.path = temp2->path;
+            temp.value = temp2->value;
+        }
     }
     return temp;
 }
