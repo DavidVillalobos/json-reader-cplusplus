@@ -32,9 +32,9 @@
 #include<iostream>
 #include"Json.h"
 
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
 
 void testFile1();
 void testFile2();
@@ -44,8 +44,8 @@ int main(int argc, char** argv) {
     testFile1();
     testFile2();
     testFile3();
-    _CrtDumpMemoryLeaks(); // show memory leaks
-    system("echo Memory leaks can be viewed from the console & timeout 5");
+    //_CrtDumpMemoryLeaks(); // show memory leaks
+    //system("echo Memory leaks can be viewed from the console & timeout 5");
 }
 
 void testFile1() {

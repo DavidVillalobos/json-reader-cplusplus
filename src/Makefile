@@ -2,8 +2,8 @@
 #	Author: David Villalobos
 #	Date: 2021-14-03
 
-OBJS = main.o Element.o Composite.o Property.o Json.o
-SOURCE = main.cpp Element.cpp Composite.cpp Property.cpp Json.cpp
+OBJS = main.o Element.o Property.o Json.o
+SOURCE = main.cpp Element.cpp Property.cpp Json.cpp
 OUT = main.exe
 CC = g++
 FLAGS = -c -g -Wall
@@ -11,9 +11,6 @@ FLAGS = -c -g -Wall
 #make
 all: $(OBJS)
 	$(CC) -g $(OBJS) -o $(OUT)
-
-Composite.o: Composite.cpp
-	$(CC) $(FLAGS) Composite.cpp
 
 Element.o: Element.cpp
 	$(CC) $(FLAGS) Element.cpp
