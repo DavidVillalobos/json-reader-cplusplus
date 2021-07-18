@@ -79,8 +79,8 @@ void testFile2() {
             std::cout << "Fail No Pass " << file["age"] << " != 24" << std::endl;
         } else if (file["address"]["city"] != "San Jone") {
             std::cout << "Fail No Pass " << file["address"]["city"] << " != San Jone" << std::endl;
-        } else if (file["address"]["postalCode"]["code"] != 394221) {
-            std::cout << "Fail No Pass " << file["address"]["postalCode"]["code"] << " != 394221" << std::endl;
+        } else if (file["phoneNumbers"][1]["number"] != "8462945527") {
+            std::cout << "Fail No Pass " << file["phoneNumbers"][1]["number"] << " != 8462945527" << std::endl;
         } else {
             std::cout << "All test file 2 passed :D" << std::endl;
         }
