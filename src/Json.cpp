@@ -18,8 +18,7 @@ Json::Json(std::string path) : Element("") {
                 std::getline(f, aux);
                 file += aux;
             }
-            Json* temp = ObjectFromString(file);
-            this->value = temp->value;
+            ObjectFromString(this, file);
         }
         else {
             throw std::runtime_error("Could not open file " + path);
@@ -77,9 +76,7 @@ std::string Json::sliceText(std::string& text, char begin, char end) {
     return obj;
 }
 
-Json* Json::ObjectFromString(std::string object) {
-    Json* temp = new Json();
-    
+void Json::ObjectFromString(Json* temp, std::string object) {
     std::smatch match;
     std::regex r("\"([\\w0-9. ]+)\"[ ]*:[ ]*\"?([\\w0-9. ]+)\"?");
     std::smatch::iterator i;
@@ -97,7 +94,8 @@ Json* Json::ObjectFromString(std::string object) {
         }
         else {
             if (object.find("{") < object.find("[")) { // is object
-                Json* aux = ObjectFromString(sliceText(object, '{', '}'));
+                Json* aux = new Json();
+                ObjectFromString(aux, sliceText(object, '{', '}'));
                 temp->value[name] = aux;
                 //std::cout << "Obj: " << sliceText(object, '{', '}') << std::endl;
             }
@@ -106,14 +104,10 @@ Json* Json::ObjectFromString(std::string object) {
             //}
         }
     }
-
-    return temp;
 }
 
-Json* Json::ArrayFromString(std::string array){
-    Json* temp = new Json();
+void Json::ArrayFromString(Json* temp, std::string array){
     // build object json from array
-    return temp;
 }
 
 std::ostream& operator << (std::ostream &o,const Json &c)

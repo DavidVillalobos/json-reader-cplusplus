@@ -25,8 +25,8 @@ class Json : public Element{
     public:
         Json(std::string path = "");
         Json& operator=(const Json& other);
-        static Json* ObjectFromString(std::string object);
-        static Json* ArrayFromString(std::string array);
+        void ObjectFromString(Json* temp, std::string object);
+        void ArrayFromString(Json * temp, std::string array);
         ~Json();
         Json(const Json& other);
         std::string getPath();
