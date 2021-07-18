@@ -36,15 +36,30 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
+void testFile1();
+
 int main(int argc, char** argv) {
-	// READFILE example.json
+    testFile1();
+    _CrtDumpMemoryLeaks(); // show memory leaks
+}
+
+void testFile1() {
     try {
         Json file_1("example.json");
-        Json subFile_1 = file_1["Name"];
-        std::cout << subFile_1;
-    } catch (std::exception& ex) {
+        if (file_1["Name"] != "Denu") {
+            std::cout << "Fail No Pass " << file_1["Name"] << " != Denu" << std::endl;
+        } else if (file_1["LastName"] != "Jhonson") {
+            std::cout << "Fail No Pass " << file_1["LastName"] << " != Jhonson" << std::endl;
+        } else if (file_1["Contact"] != 12345678) {
+            std::cout << "Fail No Pass " << file_1["Contact"] << " != 12345678" << std::endl;
+        } else if (!file_1["Admin"]) {
+            std::cout << "Fail No Pass " << file_1["Admin"] << " != true" << std::endl;
+        } else {
+            std::cout << "All test passed :D" << std::endl;
+        }
+    }
+    catch (std::exception& ex) {
         std::cout << ex.what() << std::endl;
     }
     std::cin.get();
-    _CrtDumpMemoryLeaks();
 }

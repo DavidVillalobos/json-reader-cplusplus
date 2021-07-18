@@ -1,5 +1,6 @@
 {
   "Name": "Denu",
-  "LastName" : "Jhonson", 
-  "Contact":12345678
+  "LastName" : "Jhonson",
+  "Contact": 12345678,
+  "Admin":  true
 }

@@ -93,21 +93,30 @@ void Json::ObjectFromString(Json* temp, std::string object) {
             object = match.suffix().str();
         }
         else {
+            Json* aux = new Json();
+            temp->value[name] = aux;
             if (object.find("{") < object.find("[")) { // is object
-                Json* aux = new Json();
                 ObjectFromString(aux, sliceText(object, '{', '}'));
-                temp->value[name] = aux;
                 //std::cout << "Obj: " << sliceText(object, '{', '}') << std::endl;
             }
-            //else { // is array
+            else if (object.find("[") != std::string::npos){ // is array
+                ArrayFromString(aux, sliceText(object, '[', ']'));
                 //std::cout << "Arr: " << sliceText(object, '[', ']') << std::endl;
-            //}
+            } else {
+                throw std::runtime_error("Syntax error in json for property " + name);
+            }
         }
     }
 }
 
 void Json::ArrayFromString(Json* temp, std::string array){
-    // build object json from array
+    int pos = 0;
+    while (array.find("{") != std::string::npos) { // is object
+        Json* aux = new Json();
+        ObjectFromString(aux, sliceText(array, '{', '}'));
+        temp->value[std::to_string(pos)] = aux;
+        pos++;
+    }
 }
 
 std::ostream& operator << (std::ostream &o,const Json &c)
@@ -128,7 +137,59 @@ std::string Json::getPath() {
 }
 
 Json::operator std::string() {
-    return "GET STRING PROPERTY";
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        return p->getValue();
+    } else {
+        return "";
+    }
+}
+
+Json::operator int() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        try {
+            return stoi(p->getValue());
+        } catch (std::exception& err) {
+            return 0;
+        }
+    }
+    else {
+        return 0;
+    }
+}
+
+Json::operator float() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        try {
+            return stof(p->getValue());
+        }
+        catch (std::exception& err) {
+            return 0.0f;
+        }
+    }
+    else {
+        return 0.0f;
+    }
+}
+
+Json::operator bool() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        return p->getValue() == "true";
+    }
+    else {
+        return false;
+    }
 }
 
 Json Json::operator[](const char* prop) {
@@ -158,4 +219,38 @@ Json Json::getProperty(std::string prop) {
         }
     }
     return temp;
+}
+
+bool Json::operator==(const char* value) {
+    std::string res = *this;
+    return res == value;
+}
+bool Json::operator==(const std::string value) {
+    return (std::string)*this == value;
+}
+bool Json::operator==(const int value) {
+    return (int)*this == value;
+}
+bool Json::operator==(const float value) {
+    return (float) *this == value;
+}
+bool Json::operator==(const bool value) {
+    return (bool)*this == value;
+}
+
+bool Json::operator!=(const char* value) {
+    std::string res = *this;
+    return res != value;
+}
+bool Json::operator!=(const std::string value) {
+    return (std::string)*this != value;
+}
+bool Json::operator!=(const int value) {
+    return (int)*this != value;
+}
+bool Json::operator!=(const float value) {
+    return (float) *this != value;
+}
+bool Json::operator!=(const bool value) {
+    return (bool)*this != value;
 }
