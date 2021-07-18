@@ -32,6 +32,9 @@
 #include<iostream>
 #include"Json.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 
 int main(int argc, char** argv) {
 	// READFILE example.json
@@ -43,4 +46,5 @@ int main(int argc, char** argv) {
         std::cout << ex.what() << std::endl;
     }
     std::cin.get();
+    _CrtDumpMemoryLeaks();
 }
