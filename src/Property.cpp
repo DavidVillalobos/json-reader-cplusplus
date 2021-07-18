@@ -9,8 +9,12 @@
 
 #include"Property.h"
 
-Property::Property(std::string name, std::string value) : Element(name){
+Property::Property(std::string name, std::string value) : Element(name) {
     this->value = value;
+}
+
+Property::Property(const Property& other) : Element(other.name) {
+    this->value = other.value;
 }
 
 std::ostream& operator << (std::ostream &o,const Property &p)

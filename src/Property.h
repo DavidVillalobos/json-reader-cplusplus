@@ -17,6 +17,7 @@ class Property : public Element{
         std::string value;
     public:
         Property(std::string name, std::string value);
+        Property(const Property& other);
         friend std::ostream& operator <<(std::ostream &o, const Property &p);
         std::string getValue();
         virtual ~Property();
