@@ -1,7 +1,7 @@
 /*
     File: Property.h
     Author: David Villalobos
-    Date: 2021-07-15
+    Date: 2021-07-17
     Description: Declaration of class Property
     to represent a simple value of a json, as
     int, float, bool or string.
@@ -17,7 +17,9 @@ class Property : public Element{
         std::string value;
     public:
         Property(std::string name, std::string value);
+        Property(const Property& other);
         friend std::ostream& operator <<(std::ostream &o, const Property &p);
+        std::string getValue();
         virtual ~Property();
 };
 

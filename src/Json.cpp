@@ -10,7 +10,7 @@
 Json::Json(std::string path) : Element("") {
     this->path = path;
     if (path != "") {
-        std::ifstream f("aja.json");
+        std::ifstream f(path);
         std::string file;
         if (f.good()) {
             std::string aux;
@@ -18,70 +18,117 @@ Json::Json(std::string path) : Element("") {
                 std::getline(f, aux);
                 file += aux;
             }
+            ObjectFromString(this, file);
         }
         else {
-            throw "FAIL: File not found in path " + path;
+            throw std::runtime_error("Could not open file " + path);
         }
     }
 }
 
-#include<iostream>
+Json& Json::operator=(const Json& other)
+{
+    this->path = other.path;
+    for (auto x : other.value) {
+        Property* p = dynamic_cast<Property*>(x.second);
+        if (p) {
+            this->value[x.first] = new Property(x.first, p->getValue()); 
+        }
+        else {
+            Json* temp1 = dynamic_cast<Json*>(x.second);
+            if (temp1) {
+                Json* temp2 = new Json(*temp1);
+                this->value[x.first] = temp2;
+            }
+        }
+    }
+    return *this;
+}
 
-Json Json::ObjectFromString(std::string object) {
-    Json temp;
-    
+Json::Json(const Json& other) : Element("") {
+    this->path = other.path;
+    for (auto x : other.value) {
+        Property* p = dynamic_cast<Property*>(x.second);
+        if (p) {
+            this->value[x.first] = new Property(*p); 
+        }
+        else {
+            Json* temp1 = dynamic_cast<Json*>(x.second);
+            if (temp1) {
+                Json* temp2 = new Json(*temp1);
+                this->value[x.first] = temp2;
+            }
+        }
+    }
+}
+
+std::string Json::sliceText(std::string& text, char begin, char end) {
+    text.erase(0, text.find(begin) + 1);
+    int cant = 1; 
+    size_t i = 0;
+    for (; i < text.length(); i++) {
+        if (text[i] == begin) { cant++; }
+        else if (text[i] == end) { cant--; }
+        if (cant == 0) { break; }
+    }
+    std::string obj = text.substr(0, i);
+    text.erase(0, i);
+    return obj;
+}
+
+void Json::ObjectFromString(Json* temp, std::string object) {
     std::smatch match;
-    std::regex prop("\"([\\w0-9. ]+)\"[ ]*:[ ]*\"?([\\w0-9. ]+)\"?");
-    std::regex obj("\"[\\w0-9]+\"[ \n\t]*:[ \\n\\t]*(\\{[\\w:, {}\\n\\t\"]*})");
-    std::regex arr("\"[\\w0-9]+\"[ \n\t]*:[ \\n\\t]*(\\[[\\w:, {}\\n\\t\"]*])");
+    std::regex r("\"([\\w0-9. ]+)\"[ ]*:[ ]*\"?([\\w0-9. ]+)\"?");
     std::smatch::iterator i;
-    while (regex_search(object, match, prop)) {
+    std::string name;
+    while (regex_search(object, match, r)) {
         i = match.begin();
         i++;
-        std::cout << "Group #1 Name: " << i->str() << std::endl;
+        //std::cout << "Group #1 Name: " << i->str() << std::endl;
+        name = i->str();
         i++;
-        if (i->str() == " ") {
-            std::cout << "Group #2 Prop: " << i->str() << std::endl;
+        if (i->str() != " ") {
+            temp->value[name] = new Property(name, i->str());
+            //std::cout << "Group #2 Prop: " << i->str() << std::endl;
+            object = match.suffix().str();
         }
         else {
-            if (object.find("{") < object.find("[")) { 
-                if (regex_search(object, match, obj)) {
-                    i = match.begin();
-                    i++;
-                    std::cout << "Group #2 Obj: " << i->str() << std::endl;
-                }
+            Json* aux = new Json();
+            temp->value[name] = aux;
+            object = match.suffix().str();
+            if (object.find("{") < object.find("[")) { // is object
+                ObjectFromString(aux, sliceText(object, '{', '}'));
+                //std::cout << "Obj: " << sliceText(object, '{', '}') << std::endl;
             }
-            else { 
-                if (regex_search(object, match, arr)) {
-                    std::smatch::iterator j = match.begin();
-                    i++;
-                    std::cout << "Group #2 Arr: " << i->str() << std::endl;
-                }
+            else if (object.find("[") != std::string::npos){ // is array
+                ArrayFromString(aux, sliceText(object, '[', ']'));
+                //std::cout << "Arr: " << sliceText(object, '[', ']') << std::endl;
+            } else {
+                throw std::runtime_error("Syntax error in json for property " + name);
             }
         }
-        object = match.suffix().str();
     }
-    return temp;
 }
 
-Json Json::ArrayFromString(std::string array){
-    Json temp;
-    // build object json from array
-    return temp;
+void Json::ArrayFromString(Json* temp, std::string array){
+    int pos = 0;
+    while (array.find("{") != std::string::npos) { // is object
+        Json* aux = new Json();
+        ObjectFromString(aux, sliceText(array, '{', '}'));
+        temp->value[std::to_string(pos)] = aux;
+        pos++;
+    }
 }
 
 std::ostream& operator << (std::ostream &o,const Json &c)
 {
-    o << "{ ";
-    for (auto tuple : c.value) {
-        o << tuple.second << ", ";
-    }
-    o << "}";
+    Property* prop = dynamic_cast<Property*>(c.value.begin()->second);
+    o << prop->getValue();
     return o;
 }
 
 Json::~Json(){
-    for (auto x : value){
+    for (auto x : value) {
         delete x.second; // free memory
     }
 }
@@ -91,31 +138,147 @@ std::string Json::getPath() {
 }
 
 Json::operator std::string() {
-    return "GET STRING PROPERTY";
-}
-
-Json& Json::operator[](const char* prop) {
-    return *getProperty(std::string(prop));
-}
-
-Json& Json::operator[](std::string prop) {
-    return *getProperty(prop);
-}
-
-Json& Json::operator[](int index)
-{
-    return *getProperty(std::to_string(index));
-}
-
-Json* Json::getProperty(std::string prop) {
-    Element* e = value[prop];
+    Element* e = value.begin()->second;
     Property* p = dynamic_cast<Property*>(e);
-    Json* temp;
+    Json temp;
     if (p) {
-        temp = new Json();
-        temp->value[prop] = e;
+        return p->getValue();
     } else {
-        temp = dynamic_cast<Json*>(e);
+        return "";
     }
-    return temp;
+}
+
+Json::operator int() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        try {
+            return stoi(p->getValue());
+        } catch (std::exception& err) {
+            return 0;
+        }
+    }
+    else {
+        return 0;
+    }
+}
+
+Json::operator float() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        try {
+            return stof(p->getValue());
+        }
+        catch (std::exception& err) {
+            return 0.0f;
+        }
+    }
+    else {
+        return 0.0f;
+    }
+}
+
+Json::operator double() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        try {
+            return stod(p->getValue());
+        }
+        catch (std::exception& err) {
+            return 0.0;
+        }
+    }
+    else {
+        return 0.0;
+    }
+}
+
+Json::operator bool() {
+    Element* e = value.begin()->second;
+    Property* p = dynamic_cast<Property*>(e);
+    Json temp;
+    if (p) {
+        return p->getValue() == "true";
+    }
+    else {
+        return false;
+    }
+}
+
+Json Json::operator[](const char* prop) {
+    return getProperty(std::string(prop));
+}
+
+Json Json::operator[](std::string prop) {
+    return getProperty(prop);
+}
+
+Json Json::operator[](int index)
+{
+    return getProperty(std::to_string(index));
+}
+
+Json Json::getProperty(std::string prop) {
+    Element* e = value[prop];
+    Json temp;
+    if (!e) {
+        temp.value["error"] = new Property("error", "Property " + prop + " does not exist in the json");
+        return temp;
+    }
+    Property* p = dynamic_cast<Property*>(e);
+    if (p) {
+        temp.value[prop] = new Property(*p);
+    }
+    else {
+        Json* temp2 = dynamic_cast<Json*>(e);
+        if (temp2) {
+            return Json(*temp2);
+        }
+    }
+    return temp;  
+}
+
+bool Json::operator==(const char* value) {
+    std::string res = *this;
+    return res == value;
+}
+bool Json::operator==(const std::string value) {
+    return (std::string)*this == value;
+}
+bool Json::operator==(const int value) {
+    return (int)*this == value;
+}
+bool Json::operator==(const float value) {
+    return (float) *this == value;
+}
+bool Json::operator==(const bool value) {
+    return (bool)*this == value;
+}
+bool Json::operator==(const double value) {
+    return (double)*this == value;
+}
+
+bool Json::operator!=(const char* value) {
+    std::string res = *this;
+    return res != value;
+}
+bool Json::operator!=(const std::string value) {
+    return (std::string)*this != value;
+}
+bool Json::operator!=(const int value) {
+    return (int)*this != value;
+}
+bool Json::operator!=(const float value) {
+    return (float) *this != value;
+}
+bool Json::operator!=(const bool value) {
+    return (bool)*this != value;
+}
+bool Json::operator!=(const double value) {
+    return (double)*this != value;
 }

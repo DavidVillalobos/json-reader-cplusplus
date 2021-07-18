@@ -1,7 +1,7 @@
 /*
     File: Element.cpp
     Author: David Villalobos
-    Date: 2021-07-15
+    Date: 2021-07-17
     Description: Implementation of base class to represent a property of a json
 */
 
@@ -16,9 +16,5 @@ Element::~Element(){
 }
 
 std::string Element::getName(){
-    return name;
-}
-
-std::string Element::setName(){
     return name;
 }
