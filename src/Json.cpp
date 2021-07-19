@@ -137,6 +137,10 @@ std::string Json::getPath() {
     return path;
 }
 
+size_t Json::size(){
+	return value.size();
+}
+
 Json::operator std::string() {
     Element* e = value.begin()->second;
     Property* p = dynamic_cast<Property*>(e);

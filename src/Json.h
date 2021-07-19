@@ -30,6 +30,7 @@ class Json : public Element{
         void ObjectFromString(Json* temp, std::string object);
         void ArrayFromString(Json * temp, std::string array);
         std::string getPath();
+        size_t size();
 
         friend std::ostream& operator <<(std::ostream& o, const Json& c);
         
