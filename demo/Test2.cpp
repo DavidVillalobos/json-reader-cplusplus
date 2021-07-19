@@ -12,13 +12,14 @@ int main(int argc, char** argv){
 	std::cout << "Costumber: " << bill["customer"]["name"] << ' ' << bill["customer"]["lastName"] << std::endl;
 	double total = 0, subTotalLine;
 	std::cout << "ID\tDescription\t\tAmount\tPrice\t Discount\tTotal" << std::endl;
-	for(int i = 0 ; i < bill["purchaseDetail"].size(); i++){
-		std::cout << i << ".\t" << bill["purchaseDetail"][i]["description"];
+	Json purchaseDetail = bill["purchaseDetail"];
+	for(size_t i = 0 ; i < purchaseDetail.size(); i++){
+		std::cout << i << ".\t" << purchaseDetail[i]["description"];
 		std::cout.width(12);
-		std::cout << "\t" << bill["purchaseDetail"][i]["amount"];
-		std::cout << "\t" << bill["purchaseDetail"][i]["price"];
-		subTotalLine = (double) bill["purchaseDetail"][i]["amount"] * (double) bill["purchaseDetail"][i]["price"];
-		if(bill["purchaseDetail"][i]["discount"]){
+		std::cout << "\t" << purchaseDetail[i]["amount"];
+		std::cout << "\t" << purchaseDetail[i]["price"];
+		subTotalLine = (double) purchaseDetail[i]["amount"] * (double) purchaseDetail[i]["price"];
+		if(purchaseDetail[i]["discount"]){
 			std::cout << "\t YES";
 			subTotalLine -= subTotalLine * (double) bill["discount"];
 		} else {
