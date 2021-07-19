@@ -103,6 +103,8 @@ int main(int argc, char** argv){
 	cout << "Status: " << bill["Status"] << endl;
 	cout << "Costumber: " << bill["customer"]["name"] << ' ' << bill["customer"]["lastName"] << endl;
 	double total = 0, subTotalLine;
+	double discount = bill["discount"];
+	cout << "Discount: " << discount * 100 << "%" << endl;
 	cout << "ID\tDescription\t\tAmount\tPrice\t Discount\tTotal" << endl;
 	Json purchaseDetail = bill["purchaseDetail"];
 	for(size_t i = 0 ; i < purchaseDetail.size(); i++){
@@ -113,7 +115,7 @@ int main(int argc, char** argv){
 		subTotalLine = (double) purchaseDetail[i]["amount"] * (double) purchaseDetail[i]["price"];
 		if(purchaseDetail[i]["discount"]){
 			cout << "\t YES";
-			subTotalLine -= subTotalLine * (double) bill["discount"];
+			subTotalLine -= subTotalLine * discount;
 		} else {
 			cout << "\t NOT";
 		}
