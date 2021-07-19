@@ -1,0 +1,38 @@
+{
+	"DueDate": "2021-07-18",
+	"InvoiceNumber": "83172212392",
+	"Status": "Paid out",
+	"discount": 0.10,
+	"customer" : {
+		"id" : "111",
+		"name" : "Mike",
+		"lastName" : "Anderson"
+	},
+	"purchaseDetail" : [
+		{
+			"productId" : "12345",
+			"description" : "Low fat milk",
+			"amount" : 3,
+			"price": 1.45,
+			"discount" : true
+		}, {
+			"productId" : "54321",
+			"description" : "Butter",
+			"amount" : 2,
+			"price" : 1.05,
+			"discount" : false
+		}, {
+			"productId" : "15243",
+			"description" : "Flour",
+			"amount" : 1,
+			"price" : 2.15,
+			"discount" : false
+		}, {
+			"productId" : "52341",
+			"description" : "sugar",
+			"amount" : 2,
+			"price" : 2.0,
+			"discount" : true
+		}
+	]
+}
