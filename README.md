@@ -2,6 +2,12 @@
 
 Json reader for c++, allows to generate a structure "Json" in c++ from a simple json file.  
 build with c++ only, using the fstream and regex libraries.
+
+# Installation
+Download the code from [code zip](https://github.com/DavidVillalobos/json-reader-cplusplus/archive/refs/heads/master.zip) and unzip it.  
+For this version you need to put the full path when using the JsonReader  
+so I recommend placing it near or within your project.
+
 # Usage
 1.	Include JsonReader ``` #include"path/to/JsonReader.h"```
 2.	Create a the Json object  ``` Json file("path/to/file.json"); // path to json file ```
