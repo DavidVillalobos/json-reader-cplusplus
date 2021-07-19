@@ -43,3 +43,16 @@ int main(int argc, char** argv){
 ```
 The result per console is as follows:  
 <img src="res/ResultTest.png" width="450">   
+
+
+### Author 
+
+* **[DavidVillalobos](https://github.com/DavidVillalobos)** 
+
+### Contributing
+
+For new changes, please open an issue first to discuss what you would like to change.  
+You can contact me at 📫 : villalobosgonzalezluisdavid@gmail.com  
+
+## License
+The project is licensed by  ![License](https://img.shields.io/apm/l/vim-mode)
