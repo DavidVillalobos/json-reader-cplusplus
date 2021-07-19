@@ -1,5 +1,6 @@
 #include<iostream>
-using namespace std;
+using std::cout;
+using std::endl;
 
 #include"../src/JsonReader.h" // include this file
 

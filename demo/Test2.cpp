@@ -1,34 +1,37 @@
 #include<iostream>
-using namespace std;
+using std::cout;
+using std::endl;
 
 #include"../src/JsonReader.h"
 
 int main(int argc, char** argv){
 	Json bill("invoice.json"); 
-	std::cout << "Purchase details" << std::endl;
-	std::cout << "Due date: " << bill["DueDate"] << std::endl;
-	std::cout << "Invoice number: " << bill["InvoiceNumber"] << std::endl;
-	std::cout << "Status: " << bill["Status"] << std::endl;
-	std::cout << "Costumber: " << bill["customer"]["name"] << ' ' << bill["customer"]["lastName"] << std::endl;
+	cout << "Purchase details" << endl;
+	cout << "Due date: " << bill["DueDate"] << endl;
+	cout << "Invoice number: " << bill["InvoiceNumber"] << endl;
+	cout << "Status: " << bill["Status"] << endl;
+	cout << "Costumber: " << bill["customer"]["name"] << ' ' << bill["customer"]["lastName"] << endl;
 	double total = 0, subTotalLine;
-	std::cout << "ID\tDescription\t\tAmount\tPrice\t Discount\tTotal" << std::endl;
+	double discount = bill["discount"];
+	cout << "Discount: " << discount * 100 << "%" << endl;
+	cout << "ID\tDescription\t\tAmount\tPrice\t Discount\tTotal" << endl;
 	Json purchaseDetail = bill["purchaseDetail"];
 	for(size_t i = 0 ; i < purchaseDetail.size(); i++){
-		std::cout << i << ".\t" << purchaseDetail[i]["description"];
-		std::cout.width(12);
-		std::cout << "\t" << purchaseDetail[i]["amount"];
-		std::cout << "\t" << purchaseDetail[i]["price"];
+		cout << i << ".\t" << purchaseDetail[i]["description"];
+		cout.width(12);
+		cout << "\t" << purchaseDetail[i]["amount"];
+		cout << "\t" << purchaseDetail[i]["price"];
 		subTotalLine = (double) purchaseDetail[i]["amount"] * (double) purchaseDetail[i]["price"];
 		if(purchaseDetail[i]["discount"]){
-			std::cout << "\t YES";
-			subTotalLine -= subTotalLine * (double) bill["discount"];
+			cout << "\t YES";
+			subTotalLine -= subTotalLine * discount;
 		} else {
-			std::cout << "\t NOT";
+			cout << "\t NOT";
 		}
-		std::cout.width(10);
-		std::cout << "\t" << subTotalLine << std::endl;
+		cout.width(10);
+		cout << "\t" << subTotalLine << endl;
 		total += subTotalLine;
 	}
-	std::cout << "Total: " << total << std::endl;
-	std::cout << "Thanks for your purchase" << std::endl;
+	cout << "Total: " << total << endl;
+	cout << "Thanks for your purchase" << endl;
 }
